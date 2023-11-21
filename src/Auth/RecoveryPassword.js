@@ -1,46 +1,45 @@
 import { Input } from "@material-tailwind/react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ResetPassword = () => {
+const RecoveryPassword = () => {
   const [formData, setFormData] = useState({
-    oldPassword: "",
     newPassword: "",
+    confirmPassword: "",
   });
 
-  const { oldPassword, newPassword } = formData;
+  const { newPassword, confirmPassword } = formData;
 
   const navigate = useNavigate();
 
-  const handleOnChange = (e) => {
+  const handleOnChange = (event) => {
     setFormData((preState) => ({
       ...preState,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     }));
   };
 
+  const { id, token } = useParams();
+
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/password-change",
+        `http://localhost:8000/api/admin/${id}/reset/${token}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-        credentials: "include",
+          credentials: "include",
           body: JSON.stringify(formData),
         }
       );
-
       const data = await response.json();
-      
-      const { success, message } = data;
-
+ 
+      const { message, success } = data;
       toast(message);
 
       if (success) {
@@ -55,24 +54,23 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-silver">
       <div className="p-8 rounded-xl shadow-xl bg-white w-[450px] mx-2">
-        <p className="text-xl font-bold my-3">Reset Password</p>
+        <p className="text-xl font-bold my-3">Password Recovery</p>
         <form className="flex flex-col gap-4" onSubmit={handleOnSubmit}>
-          <Input
-            name="oldPassword"
-            value={oldPassword}
-            label="Enter Old Password"
-            type="password"
-            size="lg"
-            onChange={handleOnChange}
-          />
-
           <Input
             name="newPassword"
             value={newPassword}
+            onChange={handleOnChange}
             label="Enter New Password"
             type="password"
             size="lg"
+          />
+          <Input
+            name="confirmPassword"
+            value={confirmPassword}
             onChange={handleOnChange}
+            label="Enter Confirm Password"
+            type="password"
+            size="lg"
           />
           <div class="pt-1">
             <button
@@ -80,7 +78,7 @@ const ResetPassword = () => {
               type="submit"
               data-ripple-light="true"
             >
-              UPDATE
+              SUBMIT
             </button>
           </div>
         </form>
@@ -90,4 +88,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default RecoveryPassword;
