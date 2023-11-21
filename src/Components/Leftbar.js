@@ -7,6 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Leftbar = () => {
   const navigate = useNavigate();
+
+  const handleOnClick=()=>{
+    window.scrollTo(0, 0);
+  }
+
   const logOut = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/admin/log-out", {
@@ -34,26 +39,26 @@ const Leftbar = () => {
   return (
     <div className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 ">
       <List>
-        <Link to="/home">
+        <Link to="/home" onClick={handleOnClick}>
           <ListItem>Admin</ListItem>
         </Link>
-        <Link to="/home/faq">
+        <Link to="/home/faq" onClick={handleOnClick}>
           <ListItem>FAQ's</ListItem>
         </Link>
-        <Link to="/home/history">
+        <Link to="/home/history" onClick={handleOnClick}>
           <ListItem>Case History</ListItem>
         </Link>
-        <Link to="/home/advocate">
+        <Link to="/home/advocate" onClick={handleOnClick}>
           <ListItem>Add Lawer</ListItem>
         </Link>
-        <Link to="/home/servicess">
+        <Link to="/home/servicess" onClick={handleOnClick}>
           <ListItem>Add Practice Area</ListItem>
         </Link>
-        <Link to="/home/client_comment">
+        <Link to="/home/client_comment" onClick={handleOnClick}>
           <ListItem>Client Comment</ListItem>
         </Link>
 
-        <Link to="/home/client_appointment">
+        <Link to="/home/client_appointment" onClick={handleOnClick}>
           <ListItem>Appointment</ListItem>
         </Link>
 
