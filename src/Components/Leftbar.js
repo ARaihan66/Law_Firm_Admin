@@ -8,9 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 const Leftbar = () => {
   const navigate = useNavigate();
 
-  const handleOnClick=()=>{
+  const handleOnClick = () => {
     window.scrollTo(0, 0);
-  }
+  };
 
   const logOut = async () => {
     try {
@@ -58,8 +58,14 @@ const Leftbar = () => {
           <ListItem>Client Comment</ListItem>
         </Link>
 
-        <Link to="/home/client_appointment" onClick={handleOnClick}>
-          <ListItem>Appointment</ListItem>
+        <Link to="/home/client_contact" onClick={handleOnClick}>
+          <ListItem>Client Contact</ListItem>
+        </Link>
+
+        <Link to="/reset-password">
+        <ListItem>
+          Reset Password
+        </ListItem>
         </Link>
 
         <ListItem onClick={logOut}>

@@ -8,7 +8,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@material-tailwind/react";
-import lawer from "../Assets/team-1.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -54,31 +53,33 @@ export const Advocate = () => {
     formDataToSend.append("imageUrl", imageUrl);
 
     try {
-      const response = await fetch("http://localhost:8000/api/advocate/add", {
-        method: "POST",
-        credentials: "include",
-        body: formDataToSend,
-      });
+      const responseData = await fetch(
+        "http://localhost:8000/api/advocate/add",
+        {
+          method: "POST",
+          credentials: "include",
+          body: formDataToSend,
+        }
+      );
 
-      const data = await response.json();
-      console.log(data);
+      const data = await responseData.json();
+      const { message, success } = data;
+      toast(message);
+
+      if (success) {
+        setTimeout(() => {
+          navigate(0, { reload: true });
+        }, 6000);
+      }
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.log(error.message);
     }
   };
 
-  const handleUpdate = (
-    id,
-    
-    name,
-    experience,
-    designation,
-    description
-  ) => {
+  const handleUpdate = (id, name, experience, designation, description) => {
     setId(id);
     setUpdateData(true);
     setFormData({
-      
       name: name,
       experience: experience,
       designation: designation,
@@ -88,21 +89,24 @@ export const Advocate = () => {
   };
 
   const handleUpdateSubmit = async () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", name);
+    formDataToSend.append("experience", experience);
+    formDataToSend.append("designation", designation);
+    formDataToSend.append("description", description);
+    formDataToSend.append("imageUrl", imageUrl);
     try {
       const response = await fetch(
         `http://localhost:8000/api/advocate/update/${id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           credentials: "include",
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         }
       );
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       const { message, success } = data;
       toast(message);
 
@@ -180,7 +184,6 @@ export const Advocate = () => {
             <input
               type="file"
               name="imageUrl"
-              value={imageUrl}
               onChange={handleFileChange}
               size="lg"
             />

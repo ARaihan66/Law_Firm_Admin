@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, IconButton } from "@material-tailwind/react";
-import lawicon from "../Assets/law-icon.png";
+import logo from "../Assets/Logo.png";
 import { Link } from "react-router-dom";
 const Header = ({ openDrawer }) => {
   return (
@@ -8,9 +8,9 @@ const Header = ({ openDrawer }) => {
       <div className="flex items-center justify-between text-blue-gray-900">
         <Link to="/home">
           <div className="flex items-center">
-            <img src={lawicon} alt="brand" className="w-[50px] h-[40px]" />
-            <div className="h-[50px] w-[3px] bg-indigo-900 mx-2"></div>
-            <p className="text-xl font-semibold uppercase">MUSTAFIZUR RAHMAN & ASSOCIATES</p>
+            <img src={logo} alt="brand" className="w-[300px] h-[80px]" />
+            {/*<div className="h-[50px] w-[3px] bg-indigo-900 mx-2"></div>
+            <p className="text-xl font-semibold uppercase">PROFILE</p>*/}
           </div>
         </Link>
 

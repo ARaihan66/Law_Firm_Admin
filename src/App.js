@@ -8,7 +8,7 @@ import RecoveryPassword from "./Auth/RecoveryPassword";
 
 import { Advocate } from "./Pages/Advocate";
 
-import Appointment from "./Pages/Appointment";
+import ClientContact from "./Pages/ClientContact";
 import { ClientComment } from "./Pages/ClientComment";
 import AddminPage from "./Pages/AdminPage";
 import Services from "./Pages/Services";
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       { path: "/home", element: <AddminPage /> },
       { path: "/home/faq", element: <Question /> },
       { path: "/home/advocate", element: <Advocate /> },
-      { path: "/home/client_appointment", element: <Appointment /> },
+      { path: "/home/client_contact", element: <ClientContact /> },
       { path: "/home/client_comment", element: <ClientComment /> },
       { path: "/home/servicess", element: <Services /> },
       { path: "/home/history", element: <CaseHistory /> },

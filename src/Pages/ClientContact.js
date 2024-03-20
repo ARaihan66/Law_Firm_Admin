@@ -11,13 +11,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-export const ClientComment = () => {
-  const [comments, setComments] = useState("");
+const ClientContact = () => {
+  const [contacts, setContacts] = useState("");
   const navigate = useNavigate();
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/comment/delete/${id}`,
+        `http://localhost:8000/api/contact/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -45,7 +45,7 @@ export const ClientComment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/comment/get", {
+        const response = await fetch("http://localhost:8000/api/contact/get", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const ClientComment = () => {
         const { success, data } = await response.json();
 
         if (success) {
-          setComments(data);
+          setContacts(data);
         } else {
           toast("No comment is vailable");
         }
@@ -70,25 +70,22 @@ export const ClientComment = () => {
   return (
     <div>
       <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
-        Words form Client
+       Client Contact
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-        {comments &&
-          comments?.map((item, i) => (
+        {contacts &&
+          contacts?.map((item, i) => (
             <Card className="mt-6 relative" key={i}>
-              <div className="flex justify-center">
-                <img src={avater} alt="cardimage" className="w-[100px] mt-4" />
-              </div>
               <CardBody className="mb-14">
                 <Typography variant="h5" className="mb-2">
                   {item.name}
                 </Typography>
                 <Typography>
                   <p className="text-xl font-semibold mt-1 ">
-                    Phone :
+                    Subject :
                     <span className="text-[17px] font-normal ml-1">
                       <br />
-                      {item.phone}
+                      {item.subject}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1 ">
@@ -100,7 +97,7 @@ export const ClientComment = () => {
                   <p className="text-xl font-semibold mt-1">
                     Comment :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.comment}
+                      <br /> {item.message}
                     </span>
                   </p>
                 </Typography>
@@ -123,3 +120,5 @@ export const ClientComment = () => {
     </div>
   );
 };
+
+export default ClientContact;

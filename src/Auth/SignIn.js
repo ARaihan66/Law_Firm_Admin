@@ -71,7 +71,7 @@ const SignIn = () => {
 
           <div className="flex justify-between">
             <Link to="/forgot-password">Forgot password?</Link>
-            <Link to="/reset-password">Reset password?</Link>
+            {/*<Link to="/reset-password">Reset password?</Link>*/}
           </div>
           <div class="pt-1">
             <button
