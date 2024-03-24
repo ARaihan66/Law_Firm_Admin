@@ -52,7 +52,7 @@ const AdminPage = () => {
     formDataToSend.append("about", about);
 
     try {
-      const response = await fetch("http://localhost:8000/api/admin/add", {
+      const response = await fetch("https://law-firm-backend-kappa.vercel.app/api/admin/add", {
         method: "PUT",
         credentials: "include",
         body: formDataToSend,

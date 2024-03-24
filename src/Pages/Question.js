@@ -60,7 +60,7 @@ const Question = () => {
     }
   };
 
-  const handleUpdate =(id, question, answer) => {
+  const handleUpdate = (id, question, answer) => {
     setId(id);
     setUpdateData(true);
     setFormData({
@@ -130,13 +130,16 @@ const Question = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/faq/get", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://law-firm-backend-kappa.vercel.app/api/faq/get",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         const { success, data } = await response.json();
 

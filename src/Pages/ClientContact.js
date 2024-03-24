@@ -45,13 +45,16 @@ const ClientContact = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/contact/get", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://law-firm-backend-kappa.vercel.app/api/contact/get",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         const { success, data } = await response.json();
 
@@ -70,7 +73,7 @@ const ClientContact = () => {
   return (
     <div>
       <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
-       Client Contact
+        Client Contact
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
         {contacts &&

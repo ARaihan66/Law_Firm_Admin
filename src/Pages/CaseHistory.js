@@ -78,7 +78,7 @@ const CaseHistory = () => {
     //formDataToSend.append("numeric", numeric);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/case/update/${id}`,
+        `https://law-firm-backend-kappa.vercel.app/api/case/update/${id}`,
         {
           method: "PUT",
           headers:{

@@ -151,7 +151,7 @@ export const Advocate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/advocate/get", {
+        const response = await fetch("https://law-firm-backend-kappa.vercel.app/api/advocate/get", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

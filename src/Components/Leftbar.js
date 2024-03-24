@@ -14,13 +14,16 @@ const Leftbar = () => {
 
   const logOut = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/admin/log-out", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://law-firm-backend-kappa.vercel.app/api/admin/log-out",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       const data = await response.json();
       console.log(data);
@@ -63,9 +66,7 @@ const Leftbar = () => {
         </Link>
 
         <Link to="/reset-password">
-        <ListItem>
-          Reset Password
-        </ListItem>
+          <ListItem>Reset Password</ListItem>
         </Link>
 
         <ListItem onClick={logOut}>
