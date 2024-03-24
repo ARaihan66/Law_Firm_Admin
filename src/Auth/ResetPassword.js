@@ -26,19 +26,19 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/password-change",
+        "https://law-firm-backend-kappa.vercel.app/api/admin/password-change",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-        credentials: "include",
+          credentials: "include",
           body: JSON.stringify(formData),
         }
       );
 
       const data = await response.json();
-      
+
       const { success, message } = data;
 
       toast(message);

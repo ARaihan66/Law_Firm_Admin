@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/password-forgot",
+        "https://law-firm-backend-kappa.vercel.app/api/admin/password-forgot",
         {
           method: "POST",
           headers: {

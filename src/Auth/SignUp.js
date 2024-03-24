@@ -23,7 +23,7 @@ const SignUp = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/api/admin/register", {
+      const response = await fetch("https://law-firm-backend-kappa.vercel.app/api/admin/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
