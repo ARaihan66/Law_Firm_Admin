@@ -52,7 +52,7 @@ const AdminPage = () => {
     formDataToSend.append("about", about);
 
     try {
-      const response = await fetch("https://law-firm-backend-kappa.vercel.app/api/admin/add", {
+      const response = await fetch(`${process.env.BASE_URL}/api/admin/add`, {
         method: "PUT",
         credentials: "include",
         body: formDataToSend,
@@ -91,7 +91,7 @@ const AdminPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/update/${id}`,
+        `${process.env.BASE_URL}api/admin/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -119,7 +119,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/admin/get", {
+        const response = await fetch(`${process.env.BASE_URL}/api/admin/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

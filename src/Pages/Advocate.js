@@ -54,7 +54,7 @@ export const Advocate = () => {
 
     try {
       const responseData = await fetch(
-        "http://localhost:8000/api/advocate/add",
+        `${process.env.BASE_URL}/api/advocate/add`,
         {
           method: "POST",
           credentials: "include",
@@ -97,7 +97,7 @@ export const Advocate = () => {
     formDataToSend.append("imageUrl", imageUrl);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/advocate/update/${id}`,
+        `${process.env.BASE_URL}/api/advocate/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -123,7 +123,7 @@ export const Advocate = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/advocate/delete/${id}`,
+        `${process.env.BASE_URL}/api/advocate/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -151,13 +151,16 @@ export const Advocate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://law-firm-backend-kappa.vercel.app/api/advocate/get", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${process.env.BASE_URL}/api/advocate/get`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         const serviceData = await response.json();
         //console.log(serviceData);
@@ -238,7 +241,7 @@ export const Advocate = () => {
               <Card className="mt-6 relative" key={i}>
                 <CardHeader color="blue-gray" className="mt-4">
                   <img
-                    src={`http://localhost:8000/` + item.imageUrl}
+                    src={`${process.env.BASE_URL}/` + item.imageUrl}
                     alt="cardimageUrl"
                     className="w-[100%] object-cover"
                   />

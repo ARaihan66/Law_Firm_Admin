@@ -24,7 +24,7 @@ const SignIn = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/login`, {
+      const response = await fetch(`${process.env.BASE_URL}/api/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

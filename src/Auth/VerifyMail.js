@@ -11,7 +11,7 @@ const VerifyMail = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://law-firm-backend-kappa.vercel.app/api/admin/${id}/verify/${token}`
+          `${process.env.BASE_URL}/api/admin/${id}/verify/${token}`
         );
         const { message } = response.data;
         setStatusMessage(message);

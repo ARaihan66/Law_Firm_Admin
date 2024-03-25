@@ -38,7 +38,7 @@ const CaseHistory = () => {
 
     //console.log(formDataToSend);
     try {
-      const responseData = await fetch("http://localhost:8000/api/case/add", {
+      const responseData = await fetch(`${process.env.BASE_URL}/api/case/add`, {
         method: "POST",
         headers:{
           "Content-Type":"application/json"
@@ -78,7 +78,7 @@ const CaseHistory = () => {
     //formDataToSend.append("numeric", numeric);
     try {
       const response = await fetch(
-        `https://law-firm-backend-kappa.vercel.app/api/case/update/${id}`,
+        `${process.env.BASE_URL}/api/case/update/${id}`,
         {
           method: "PUT",
           headers:{
@@ -107,7 +107,7 @@ const CaseHistory = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/case/delete/${id}`,
+        `${process.env.BASE_URL}/api/case/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -135,7 +135,7 @@ const CaseHistory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/case/get", {
+        const response = await fetch(`${process.env.BASE_URL}/api/case/get`, {
           method: "GET",
           credentials: "include",
         });

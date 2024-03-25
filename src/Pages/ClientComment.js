@@ -17,7 +17,7 @@ export const ClientComment = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-kappa.vercel.app/api/comment/delete/${id}`,
+        `${process.env.BASE_URL}/api/comment/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -45,7 +45,7 @@ export const ClientComment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/comment/get", {
+        const response = await fetch(`${process.env.BASE_URL}/api/comment/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

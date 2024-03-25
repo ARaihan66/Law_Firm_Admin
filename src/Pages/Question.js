@@ -35,7 +35,7 @@ const Question = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/api/faq/add", {
+      const response = await fetch(`${process.env.BASE_URL}/api/faq/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const Question = () => {
   const handleUpdateSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/faq/update/${id}`,
+        `${process.env.BASE_URL}/api/faq/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -102,7 +102,7 @@ const Question = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/faq/delete/${id}`,
+        `${process.env.BASE_URL}/api/faq/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -131,7 +131,7 @@ const Question = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://law-firm-backend-kappa.vercel.app/api/faq/get",
+          `${process.env.BASE_URL}/api/faq/get`,
           {
             method: "GET",
             headers: {

@@ -17,7 +17,7 @@ const ClientContact = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/contact/delete/${id}`,
+        `${process.env.BASE_URL}/api/contact/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -46,7 +46,7 @@ const ClientContact = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://law-firm-backend-kappa.vercel.app/api/contact/get",
+          `${process.env.BASE_URL}/api/contact/get`,
           {
             method: "GET",
             headers: {

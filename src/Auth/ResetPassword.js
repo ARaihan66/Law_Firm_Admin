@@ -26,7 +26,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "https://law-firm-backend-kappa.vercel.app/api/admin/password-change",
+        `${process.env.BASE_URL}/api/admin/password-change`,
         {
           method: "POST",
           headers: {

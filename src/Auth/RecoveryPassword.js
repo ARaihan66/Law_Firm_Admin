@@ -27,7 +27,7 @@ const RecoveryPassword = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `https://law-firm-backend-kappa.vercel.app/api/admin/${id}/reset/${token}`,
+        `${process.env.BASE_URL}/api/admin/${id}/reset/${token}`,
         {
           method: "POST",
           headers: {
