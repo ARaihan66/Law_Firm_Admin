@@ -23,12 +23,12 @@ const SignUp = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.BASE_URL}/api/admin/register`, {
+      const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/register`, {
         method: "POST",
         headers: {
+          credentials: "include",
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(formData),
       });
 
