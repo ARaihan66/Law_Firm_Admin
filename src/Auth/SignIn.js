@@ -27,6 +27,7 @@ const SignIn = () => {
       const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/login`, {
         method: "POST",
         headers: {
+          'Access-Control-Allow-Origin': '*',
           "Content-Type": "application/json",
         },
         credentials: "include",
