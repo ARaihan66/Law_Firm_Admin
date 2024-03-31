@@ -23,7 +23,7 @@ const AdminPage = () => {
     about: "",
     imageUrl: null,
   });
-  const animation = useRef(null)
+  const animation = useRef(null);
 
   const { instituteName, about, imageUrl } = formData;
 
@@ -52,11 +52,14 @@ const AdminPage = () => {
     formDataToSend.append("about", about);
 
     try {
-      const response = await fetch(`${process.env.BASE_URL}/api/admin/add`, {
-        method: "PUT",
-        credentials: "include",
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        `https://law-firm-backend-sigma.vercel.app/api/admin/add`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formDataToSend,
+        }
+      );
 
       const responseData = await response.json();
       console.log(responseData);
@@ -91,7 +94,7 @@ const AdminPage = () => {
 
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}api/admin/update/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/admin/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -119,16 +122,19 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.BASE_URL}/api/admin/get`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          `https://law-firm-backend-sigma.vercel.app/api/admin/get`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         const serviceData = await response.json();
-        //console.log(serviceData);
+        console.log(serviceData);
         const { data, message } = serviceData;
         toast(message);
         setData(data);
@@ -140,19 +146,9 @@ const AdminPage = () => {
     fetchData();
   }, []);
 
-  //useEffect(()=>{
-  //  Lottie.loadAnimation({
-  //    container : animation.current,
-  //    renderer:'svg',
-  //    loop:true,
-  //    autoplay:true,
-  //    animationData:require("../Animation/Loader.json")
-  //  })
-  //},[])
-
   return (
     <div>
-    <p ref={animation}></p>
+      <p ref={animation}></p>
       <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
         Add Admin Information
       </p>
@@ -196,11 +192,14 @@ const AdminPage = () => {
       </div>
       <div className="flex justify-center">
         <div className="md:px-20 p-5 grid grid-cols-1  gap-4">
-          {data.length > 0 && (
+          {data && data.length > 0 && (
             <Card className="mt-6 relative">
               <CardHeader color="blue-gray" className="mt-4">
                 <img
-                  src={`http://localhost:8000/` + data[0].imageUrl}
+                  src={
+                    `https://law-firm-backend-sigma.vercel.app/` +
+                    data[0]?.imageUrl
+                  }
                   alt="cardimageUrl"
                   className="w-[100%] object-cover"
                 />
@@ -212,14 +211,14 @@ const AdminPage = () => {
                       Institute Name :
                       <span className="text-[17px] font-normal ml-1">
                         <br />
-                        {data[0].instituteName}
+                        {data[0]?.instituteName}
                       </span>
                     </h1>
 
                     <p className="text-xl font-semibold mt-1">
                       About :
                       <span className="text-[17px] font-normal ml-1">
-                        <br /> {data[0].about}
+                        <br /> {data[0]?.about}
                       </span>
                     </p>
                   </div>
@@ -230,9 +229,9 @@ const AdminPage = () => {
                   <Button
                     onClick={() => {
                       handleUpdate(
-                        data[0]._id,
-                        data[0].instituteName,
-                        data[0].about
+                        data[0]?._id,
+                        data[0]?.instituteName,
+                        data[0]?.about
                       );
                     }}
                     color="green"

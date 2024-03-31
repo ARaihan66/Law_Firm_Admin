@@ -34,7 +34,7 @@ const Services = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}/api/practice/add`,
+        `http://localhost:8000/api/practice/add`,
         {
           method: "POST",
           headers: {
@@ -74,7 +74,7 @@ const Services = () => {
   const handleUpdateSubmit = async () => {
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}/api/practice/update/${id}`,
+        `http://localhost:8000/api/practice/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -103,7 +103,7 @@ const Services = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}/api/practice/delete/${id}`,
+        `http://localhost:8000/api/practice/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -131,7 +131,7 @@ const Services = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.BASE_URL}/api/practice/get`, {
+        const response = await fetch(`http://localhost:8000/api/practice/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

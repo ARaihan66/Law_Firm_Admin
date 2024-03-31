@@ -1,6 +1,7 @@
 {
   "name": "law-admin",
   "version": "0.1.0",
+  "homepage": "http://admin.rasmul.com/",
   "private": true,
   "dependencies": {
     "@material-tailwind/react": "^2.1.4",

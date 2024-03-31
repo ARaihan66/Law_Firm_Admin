@@ -26,7 +26,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}/api/admin/password-change`,
+        `https://law-firm-backend-sigma.vercel.app/api/admin/password-change`,
         {
           method: "POST",
           headers: {

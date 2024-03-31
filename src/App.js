@@ -15,7 +15,6 @@ import Services from "./Pages/Services";
 import CaseHistory from "./Pages/CaseHistory";
 import ForgotPassword from "./Auth/ForgotPassword";
 import VerifyMail from "./Auth/VerifyMail";
-import OtpVerify from "./Auth/OtpVerify";
 
 const router = createBrowserRouter([
   {
@@ -43,12 +42,8 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/adminId/:id/verify/:token",
+    path: "/admin/:id/verify/:token",
     element: <VerifyMail />,
-  },
-  {
-    path: "/otp/verify",
-    element: <OtpVerify/>,
   },
   {
     path: "/home",

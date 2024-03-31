@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}api/admin/password-forgot`,
+        `http://localhost:8000/api/admin/password-forgot`,
         {
           method: "POST",
           headers: {
