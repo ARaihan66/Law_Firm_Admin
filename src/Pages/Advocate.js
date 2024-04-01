@@ -54,7 +54,7 @@ export const Advocate = () => {
 
     try {
       const responseData = await fetch(
-        `http://localhost:8000/api/advocate/add`,
+        `https://law-firm-backend-sigma.vercel.app/api/advocate/add`,
         {
           method: "POST",
           credentials: "include",
@@ -97,7 +97,7 @@ export const Advocate = () => {
     formDataToSend.append("imageUrl", imageUrl);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/advocate/update/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/advocate/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -123,7 +123,7 @@ export const Advocate = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/advocate/delete/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/advocate/delete/${id}`,
         {
           method: "DELETE",
           headers: {

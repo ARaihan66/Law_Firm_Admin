@@ -35,7 +35,7 @@ const Question = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8000/api/faq/add`, {
+      const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const Question = () => {
   const handleUpdateSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/faq/update/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/faq/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -102,7 +102,7 @@ const Question = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/faq/delete/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/faq/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -131,7 +131,7 @@ const Question = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/faq/get`,
+          `https://law-firm-backend-sigma.vercel.app/api/faq/get`,
           {
             method: "GET",
             headers: {
@@ -140,9 +140,9 @@ const Question = () => {
             credentials: "include",
           }
         );
-
+  
         const { success, data } = await response.json();
-
+  
         if (success) {
           setData(data);
         } else {
@@ -150,11 +150,13 @@ const Question = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        toast.error("Error fetching data. Please try again later.");
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   return (
     <div>

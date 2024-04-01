@@ -17,7 +17,7 @@ export const ClientComment = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/comment/delete/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/comment/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -45,7 +45,7 @@ export const ClientComment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/comment/get`, {
+        const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/comment/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

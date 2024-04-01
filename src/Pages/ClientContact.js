@@ -17,7 +17,7 @@ const ClientContact = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/contact/delete/${id}`,
+        `https://law-firm-backend-sigma.vercel.app/api/contact/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -46,7 +46,7 @@ const ClientContact = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/contact/get`,
+          `https://law-firm-backend-sigma.vercel.app/api/contact/get`,
           {
             method: "GET",
             headers: {
