@@ -9,8 +9,6 @@ const Header = ({ openDrawer }) => {
         <Link to="/home">
           <div className="flex items-center">
             <img src={logo} alt="brand" className="w-[300px] h-[80px]" />
-            {/*<div className="h-[50px] w-[3px] bg-indigo-900 mx-2"></div>
-            <p className="text-xl font-semibold uppercase">PROFILE</p>*/}
           </div>
         </Link>
 

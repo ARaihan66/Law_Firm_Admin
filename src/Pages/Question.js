@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -35,7 +35,7 @@ const Question = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/add`, {
+      const response = await fetch(`http://localhost:8000/api/faq/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const Question = () => {
   const handleUpdateSubmit = async () => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/faq/update/${id}`,
+        `http://localhost:8000/api/faq/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -102,7 +102,7 @@ const Question = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/faq/delete/${id}`,
+        `http://localhost:8000/api/faq/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -130,19 +130,16 @@ const Question = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://law-firm-backend-sigma.vercel.app/api/faq/get`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-  
+        const response = await fetch(`http://localhost:8000/api/faq/get`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
         const { success, data } = await response.json();
-  
+
         if (success) {
           setData(data);
         } else {
@@ -153,15 +150,14 @@ const Question = () => {
         toast.error("Error fetching data. Please try again later.");
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   return (
     <div>
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
-        FAQ's
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
+        Frequently Asked Questions
       </p>
       <div className="flex justify-center">
         <form action="">
@@ -173,7 +169,7 @@ const Question = () => {
               size="lg"
               label="Question"
             />
-            <Input
+            <Textarea
               name="answer"
               value={answer}
               onChange={handleOnChange}

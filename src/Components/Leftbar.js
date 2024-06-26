@@ -15,7 +15,7 @@ const Leftbar = () => {
   const logOut = async () => {
     try {
       const response = await fetch(
-        "https://law-firm-backend-kappa.vercel.app/api/admin/log-out",
+        "http://localhost:8000/api/admin/log-out",
         {
           method: "GET",
           headers: {
@@ -59,6 +59,10 @@ const Leftbar = () => {
         </Link>
         <Link to="/home/client_comment" onClick={handleOnClick}>
           <ListItem>Client Comment</ListItem>
+        </Link>
+
+        <Link to="/home/client_request" onClick={handleOnClick}>
+          <ListItem>Client Request</ListItem>
         </Link>
 
         <Link to="/home/client_contact" onClick={handleOnClick}>

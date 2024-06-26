@@ -27,7 +27,7 @@ const RecoveryPassword = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/admin/${id}/reset/${token}`,
+        `http://localhost:8000/api/admin/${id}/reset/${token}`,
         {
           method: "POST",
           headers: {

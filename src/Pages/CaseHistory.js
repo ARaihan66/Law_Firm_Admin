@@ -38,7 +38,7 @@ const CaseHistory = () => {
 
     //console.log(formDataToSend);
     try {
-      const responseData = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/add`, {
+      const responseData = await fetch(`http://localhost:8000/api/case/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const CaseHistory = () => {
     //formDataToSend.append("numeric", numeric);
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/case/update/${id}`,
+        `http://localhost:8000/api/case/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -107,7 +107,7 @@ const CaseHistory = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/case/delete/${id}`,
+        `http://localhost:8000/api/case/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -135,10 +135,13 @@ const CaseHistory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/get`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const response = await fetch(
+          `http://localhost:8000/api/case/get`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         const serviceData = await response.json();
         console.log(serviceData);
@@ -154,7 +157,7 @@ const CaseHistory = () => {
   }, []);
   return (
     <div>
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Add Case History
       </p>
       <div className="flex justify-center">

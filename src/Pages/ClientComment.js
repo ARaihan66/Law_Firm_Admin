@@ -12,12 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 export const ClientComment = () => {
+  const [approve, setApprove] = useState(false);
   const [comments, setComments] = useState("");
   const navigate = useNavigate();
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/comment/delete/${id}`,
+        `http://localhost:8000/api/comment/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -45,7 +46,7 @@ export const ClientComment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/comment/get`, {
+        const response = await fetch(`http://localhost:8000/api/comment/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +70,7 @@ export const ClientComment = () => {
   }, []);
   return (
     <div>
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Words form Client
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
@@ -105,16 +106,27 @@ export const ClientComment = () => {
                   </p>
                 </Typography>
               </CardBody>
-              <CardFooter className="pt-0 absolute bottom-0">
-                <Button
-                  color="red"
-                  className="mb-0"
-                  onClick={() => {
-                    handleDelete(item._id);
-                  }}
-                >
-                  Delete
-                </Button>
+              <CardFooter className="pt-0 bottom-0">
+                <div className="flex justify-between">
+                  <Button
+                    color="red"
+                    className="mb-0"
+                    onClick={() => {
+                      handleDelete(item._id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    color="red"
+                    className="mb-0"
+                    onClick={() => {
+                      setApprove(true);
+                    }}
+                  >
+                    {approve ? "Approved" : "Approve"}
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           ))}

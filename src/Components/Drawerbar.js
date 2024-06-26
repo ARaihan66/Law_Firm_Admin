@@ -7,8 +7,7 @@ const Drawerbar = ({ open, closeDrawer }) => {
     <div>
       <React.Fragment>
         <Drawer open={open} onClose={closeDrawer}>
-          <div className='mb-2 flex items-center justify-between p-4'>
-            <img src={lawicon} alt='brand' className='w-[50px] h-[40px]' />
+          <div className='mb-2 float-right p-4'>
             <IconButton variant='text' color='blue-gray' onClick={closeDrawer}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -16,7 +15,7 @@ const Drawerbar = ({ open, closeDrawer }) => {
                 viewBox='0 0 24 24'
                 strokeWidth={2}
                 stroke='currentColor'
-                className='h-5 w-5'
+                className='w-[40px] h-[40px]'
               >
                 <path
                   strokeLinecap='round'

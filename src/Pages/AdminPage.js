@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -52,14 +52,11 @@ const AdminPage = () => {
     formDataToSend.append("about", about);
 
     try {
-      const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/admin/add`,
-        {
-          method: "PUT",
-          credentials: "include",
-          body: formDataToSend,
-        }
-      );
+      const response = await fetch(`http://localhost:8000/api/admin/add`, {
+        method: "PUT",
+        credentials: "include",
+        body: formDataToSend,
+      });
 
       const responseData = await response.json();
       console.log(responseData);
@@ -94,7 +91,7 @@ const AdminPage = () => {
 
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/admin/update/${id}`,
+        `http://localhost:8000/api/admin/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -122,19 +119,16 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://law-firm-backend-sigma.vercel.app/api/admin/get`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`http://localhost:8000/api/admin/get`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
 
         const serviceData = await response.json();
-        console.log(serviceData);
+        //console.log(serviceData);
         const { data, message } = serviceData;
         toast(message);
         setData(data);
@@ -149,8 +143,8 @@ const AdminPage = () => {
   return (
     <div>
       <p ref={animation}></p>
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
-        Add Admin Information
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
+      Admin Information
       </p>
       <div className="flex justify-center">
         <form onSubmit={handleSubmit}>
@@ -169,8 +163,7 @@ const AdminPage = () => {
               size="lg"
               label="Your Institute Name"
             />
-            <Input
-              type="text"
+            <Textarea
               onChange={handleOnChange}
               name="about"
               value={about}
@@ -196,10 +189,7 @@ const AdminPage = () => {
             <Card className="mt-6 relative">
               <CardHeader color="blue-gray" className="mt-4">
                 <img
-                  src={
-                    `https://law-firm-backend-sigma.vercel.app/` +
-                    data[0]?.imageUrl
-                  }
+                  src={`http://localhost:8000/` + data[0]?.imageUrl}
                   alt="cardimageUrl"
                   className="w-[100%] object-cover"
                 />

@@ -11,13 +11,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-const ClientContact = () => {
-  const [contacts, setContacts] = useState("");
+const ClientRequest = () => {
+  const [comments, setComments] = useState("");
   const navigate = useNavigate();
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/contact/delete/${id}`,
+        `http://localhost:8000/api/comment/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -45,21 +45,18 @@ const ClientContact = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/contact/get`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`http://localhost:8000/api/comment/get`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
 
         const { success, data } = await response.json();
 
         if (success) {
-          setContacts(data);
+          setComments(data);
         } else {
           toast("No comment is vailable");
         }
@@ -73,22 +70,25 @@ const ClientContact = () => {
   return (
     <div>
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
-        Client Contact
+        Consultancy request of Client
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-        {contacts &&
-          contacts?.map((item, i) => (
+        {comments &&
+          comments?.map((item, i) => (
             <Card className="mt-6 relative" key={i}>
+              <div className="flex justify-center">
+                <img src={avater} alt="cardimage" className="w-[100px] mt-4" />
+              </div>
               <CardBody className="mb-14">
                 <Typography variant="h5" className="mb-2">
                   {item.name}
                 </Typography>
                 <Typography>
                   <p className="text-xl font-semibold mt-1 ">
-                    Subject :
+                    Phone :
                     <span className="text-[17px] font-normal ml-1">
                       <br />
-                      {item.subject}
+                      {item.phone}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1 ">
@@ -98,9 +98,27 @@ const ClientContact = () => {
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1">
-                    Comment :
+                    Subject :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.message}
+                      <br /> {item.comment}
+                    </span>
+                  </p>
+                  <p className="text-xl font-semibold mt-1">
+                    Expected Date :
+                    <span className="text-[17px] font-normal ml-1">
+                      <br /> {item.comment}
+                    </span>
+                  </p>
+                  <p className="text-xl font-semibold mt-1">
+                    Selected Lawer :
+                    <span className="text-[17px] font-normal ml-1">
+                      <br /> {item.comment}
+                    </span>
+                  </p>
+                  <p className="text-xl font-semibold mt-1">
+                    Request Message :
+                    <span className="text-[17px] font-normal ml-1">
+                      <br /> {item.comment}
                     </span>
                   </p>
                 </Typography>
@@ -124,4 +142,4 @@ const ClientContact = () => {
   );
 };
 
-export default ClientContact;
+export default ClientRequest;

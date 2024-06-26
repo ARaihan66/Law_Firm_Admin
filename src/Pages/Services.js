@@ -1,4 +1,4 @@
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,17 +33,14 @@ const Services = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/practice/add`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`http://localhost:8000/api/practice/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
       //console.log(data);
@@ -74,7 +71,7 @@ const Services = () => {
   const handleUpdateSubmit = async () => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/practice/update/${id}`,
+        `http://localhost:8000/api/practice/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -103,7 +100,7 @@ const Services = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/practice/delete/${id}`,
+        `http://localhost:8000/api/practice/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -131,7 +128,7 @@ const Services = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/practice/get`, {
+        const response = await fetch(`http://localhost:8000/api/practice/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -154,7 +151,7 @@ const Services = () => {
   return (
     <div>
       {" "}
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Add Practice Area
       </p>
       <div className="flex justify-center">
@@ -167,7 +164,7 @@ const Services = () => {
               name="service_type"
               value={service_type}
             />
-            <Input
+            <Textarea
               onChange={handleOnChange}
               size="lg"
               name="service_description"

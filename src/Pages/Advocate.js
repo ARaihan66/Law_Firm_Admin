@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import {
@@ -54,7 +54,7 @@ export const Advocate = () => {
 
     try {
       const responseData = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/advocate/add`,
+        `http://localhost:8000/api/advocate/add`,
         {
           method: "POST",
           credentials: "include",
@@ -97,7 +97,7 @@ export const Advocate = () => {
     formDataToSend.append("imageUrl", imageUrl);
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/advocate/update/${id}`,
+        `http://localhost:8000/api/advocate/update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -123,7 +123,7 @@ export const Advocate = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `https://law-firm-backend-sigma.vercel.app/api/advocate/delete/${id}`,
+        `http://localhost:8000/api/advocate/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -151,7 +151,7 @@ export const Advocate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/advocate/get`, {
+        const response = await fetch(`http://localhost:8000/api/advocate/get`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export const Advocate = () => {
   return (
     <div>
       {" "}
-      <p className="text-center pt-5 text-3xl font-semibold text-deep-purple-800">
+      <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Add Lawer
       </p>
       <div className="flex justify-center">
@@ -211,7 +211,7 @@ export const Advocate = () => {
               size="lg"
               label="Designation"
             />
-            <Input
+            <Textarea
               type="text"
               name="description"
               value={description}
@@ -238,7 +238,7 @@ export const Advocate = () => {
               <Card className="mt-6 relative" key={i}>
                 <CardHeader color="blue-gray" className="mt-4">
                   <img
-                    src={`https://law-firm-backend-sigma.vercel.app/` + item.imageUrl}
+                    src={`http://localhost:8000/` + item.imageUrl}
                     alt="cardimageUrl"
                     className="w-[100%] object-cover"
                   />
