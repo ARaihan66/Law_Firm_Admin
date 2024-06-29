@@ -16,6 +16,7 @@ import CaseHistory from "./Pages/CaseHistory";
 import ForgotPassword from "./Auth/ForgotPassword";
 import VerifyMail from "./Auth/VerifyMail";
 import ClientRequest from "./Pages/ClientRequest";
+import ConsultancyRequest from "./Pages/ConsultancyRequest";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
       { path: "/home/servicess", element: <Services /> },
       { path: "/home/history", element: <CaseHistory /> },
       { path: "/home/client_request", element: <ClientRequest/> },
+      { path: "/home/consultancy-request", element: <ConsultancyRequest/> },
     ],
   },
 ]);

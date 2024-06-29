@@ -1,21 +1,14 @@
-import React, { useRef } from "react";
-import { Input, Textarea } from "@material-tailwind/react";
-import { Button } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { Input, Textarea, Button, Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from "@material-tailwind/react";
-
-import Lottie from "lottie-web";
+import Lottie from "react-lottie";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAdminData, addAdmin, updateAdmin, deleteAdmin } from "../features/adminSlice";
+import Loading from "../Animation/Loader.json";
 
 const AdminPage = () => {
-  const [data, setData] = useState([]);
   const [id, setId] = useState(null);
   const [updateData, setUpdateData] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,11 +16,19 @@ const AdminPage = () => {
     about: "",
     imageUrl: null,
   });
+  const { isLoading, fetchData, error } = useSelector((state) => state.admin);
+
+  console.log(fetchData)
+
+  const dispatch = useDispatch();
   const animation = useRef(null);
+  const navigate = useNavigate();
 
   const { instituteName, about, imageUrl } = formData;
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(fetchAdminData());
+  }, [dispatch]);
 
   const handleOnChange = (e) => {
     setFormData({
@@ -46,30 +47,38 @@ const AdminPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!instituteName || !about) {
+      toast.error("Please fill up all fields");
+      return;
+    }
+
     const formDataToSend = new FormData();
     formDataToSend.append("imageUrl", imageUrl);
     formDataToSend.append("instituteName", instituteName);
     formDataToSend.append("about", about);
 
-    try {
-      const response = await fetch(`http://localhost:8000/api/admin/add`, {
-        method: "PUT",
-        credentials: "include",
-        body: formDataToSend,
+    if (updateData) {
+      dispatch(updateAdmin({ id, formData: formDataToSend })).then((response) => {
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          setUpdateData(false);
+          setId(null);
+          setFormData({ instituteName: "", about: "", imageUrl: null });
+          dispatch(fetchAdminData());
+        } else {
+          toast.error(response.payload.message);
+        }
       });
-
-      const responseData = await response.json();
-      console.log(responseData);
-
-      // Handle success and navigate if needed
-      if (responseData.success) {
-        toast(responseData.message);
-        navigate(0, { reload: true });
-      } else {
-        toast.error(responseData.message);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    } else {
+      dispatch(addAdmin(formDataToSend)).then((response) => {
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          setFormData({ instituteName: "", about: "", imageUrl: null });
+          dispatch(fetchAdminData());
+        } else {
+          toast.error(response.payload.message);
+        }
+      });
     }
   };
 
@@ -83,68 +92,41 @@ const AdminPage = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleUpdateSubmit = async () => {
-    const formDataToSend = new FormData();
-    formDataToSend.append("imageUrl", imageUrl);
-    formDataToSend.append("instituteName", instituteName);
-    formDataToSend.append("about", about);
+  //const handleDelete = (adminId) => {
+  //  dispatch(deleteAdmin(adminId)).then((response) => {
+  //    if (response.type === 'admin/deleteAdmin/fulfilled') {
+  //      toast.success("Admin deleted successfully");
+  //      dispatch(fetchAdminData());
+  //    } else {
+  //      toast.error("Error deleting admin");
+  //    }
+  //  });
+  //};
 
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/update/${id}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          body: formDataToSend,
-        }
-      );
-
-      const responseData = await response.json();
-      console.log(responseData);
-
-      // Handle success and navigate if needed
-      if (responseData.success) {
-        toast(responseData.message);
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      } else {
-        toast.error(responseData.message);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/admin/get`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-[100vh]"><Lottie options={defaultLoader} height={200} width={200}/></div>;
+  }
 
-        const serviceData = await response.json();
-        //console.log(serviceData);
-        const { data, message } = serviceData;
-        toast(message);
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (error) {
+    return <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+    Error: {error}
+    </div>;
+  }
 
   return (
     <div>
       <p ref={animation}></p>
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
-      Admin Information
+        Admin Information
       </p>
       <div className="flex justify-center">
         <form onSubmit={handleSubmit}>
@@ -170,68 +152,58 @@ const AdminPage = () => {
               size="lg"
               label="About Yourself"
             />
-
-            {updateData ? (
-              <Button color="blue" type="button" onClick={handleUpdateSubmit}>
-                Update Admin
-              </Button>
-            ) : (
-              <Button color="blue" type="button" onClick={handleSubmit}>
-                Submit
-              </Button>
-            )}
+            <Button color="blue" type="submit">
+              {updateData ? "Update Admin" : "Submit"}
+            </Button>
           </div>
         </form>
       </div>
       <div className="flex justify-center">
-        <div className="md:px-20 p-5 grid grid-cols-1  gap-4">
-          {data && data.length > 0 && (
-            <Card className="mt-6 relative">
+        <div className="md:px-20 p-5 grid grid-cols-1 gap-4">
+          {fetchData?.data?.length > 0 && fetchData.data.map((item, index) => (
+            <Card key={index} className="mt-6 relative">
               <CardHeader color="blue-gray" className="mt-4">
                 <img
-                  src={`http://localhost:8000/` + data[0]?.imageUrl}
+                  src={`http://localhost:8000/${item?.imageUrl}`}
                   alt="cardimageUrl"
                   className="w-[100%] object-cover"
                 />
               </CardHeader>
               <CardBody className="mb-14">
                 <div>
-                  <div>
-                    <h1 className="text-xl font-semibold">
-                      Institute Name :
-                      <span className="text-[17px] font-normal ml-1">
-                        <br />
-                        {data[0]?.instituteName}
-                      </span>
-                    </h1>
-
-                    <p className="text-xl font-semibold mt-1">
-                      About :
-                      <span className="text-[17px] font-normal ml-1">
-                        <br /> {data[0]?.about}
-                      </span>
-                    </p>
-                  </div>
+                  <h1 className="text-xl font-semibold">
+                    Institute Name:
+                    <span className="text-[17px] font-normal ml-1">
+                      <br />
+                      {item?.instituteName}
+                    </span>
+                  </h1>
+                  <p className="text-xl font-semibold mt-1 text-justify">
+                    About:
+                    <span className="text-[17px] font-normal ml-1">
+                      <br /> {item?.about}
+                    </span>
+                  </p>
                 </div>
               </CardBody>
               <CardFooter className="pt-0 absolute bottom-0 w-full">
-                <div className="flex justify-center ">
+                <div className="flex justify-center items-center">
                   <Button
-                    onClick={() => {
-                      handleUpdate(
-                        data[0]?._id,
-                        data[0]?.instituteName,
-                        data[0]?.about
-                      );
-                    }}
+                    onClick={() => handleUpdate(item._id, item.instituteName, item.about)}
                     color="green"
                   >
                     Update
                   </Button>
+                  {/*<Button
+                    onClick={() => handleDelete(item._id)}
+                    color="red"
+                  >
+                    Delete
+                  </Button>*/}
                 </div>
               </CardFooter>
             </Card>
-          )}
+          ))}
         </div>
       </div>
       <ToastContainer />

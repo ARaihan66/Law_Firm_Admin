@@ -40,8 +40,8 @@ const Leftbar = () => {
     }
   };
   return (
-    <div className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 ">
-      <List>
+    <div className="w-full max-w-[20rem] p-4">
+      <List className="overflow-y-auto h-screen">
         <Link to="/home" onClick={handleOnClick}>
           <ListItem>Admin</ListItem>
         </Link>
@@ -56,6 +56,9 @@ const Leftbar = () => {
         </Link>
         <Link to="/home/servicess" onClick={handleOnClick}>
           <ListItem>Add Practice Area</ListItem>
+        </Link>
+        <Link to="/home/consultancy-request" onClick={handleOnClick}>
+          <ListItem>Consultancy Request</ListItem>
         </Link>
         <Link to="/home/client_comment" onClick={handleOnClick}>
           <ListItem>Client Comment</ListItem>
