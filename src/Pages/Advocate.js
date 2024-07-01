@@ -8,12 +8,13 @@ import {
   CardFooter,
   CardHeader,
 } from "@material-tailwind/react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addLawerData, deleteLawerData, fetchLawerData, updateLawerData } from "../features/lawerSlice";
+import Lottie from "react-lottie";
+import Loading from "../Animation/Loader.json";
+import toast, { Toaster } from "react-hot-toast";
 
 export const Advocate = () => {
-  const [data, setData] = useState();
   const [id, setId] = useState(null);
   const [updateData, setUpdateData] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,7 +27,9 @@ export const Advocate = () => {
 
   const { name, experience, designation, description, imageUrl } = formData;
 
-  const navigate = useNavigate();
+  const { isLoading, data, error } = useSelector((state) => state.lawer);
+  const dispatch = useDispatch();
+
 
   const handleOnChange = (e) => {
     setFormData({
@@ -45,34 +48,44 @@ export const Advocate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!name || !experience || !designation || !description) {
+      toast.error("Please fill up all fields");
+      return;
+    }
+
     const formDataToSend = new FormData();
     formDataToSend.append("name", name);
     formDataToSend.append("experience", experience);
     formDataToSend.append("designation", designation);
     formDataToSend.append("description", description);
     formDataToSend.append("imageUrl", imageUrl);
-
-    try {
-      const responseData = await fetch(
-        `http://localhost:8000/api/advocate/add`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: formDataToSend,
+    
+    if (updateData) {
+      dispatch(updateLawerData({id, formData: formDataToSend }))
+      .unwrap()
+      .then((response) => {
+        console.log("Res", response.payload);
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          resetForm();
+        } else {
+          toast.error(response.payload.message || "Update failed");
         }
-      );
-
-      const data = await responseData.json();
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
+      }).catch((error) => {
+        toast.error("Update failed: " + error.message);
+        console.log(error)
+      });
+    } else {
+      dispatch(addLawerData(formDataToSend)).then((response) => {
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          resetForm();
+        } else {
+          toast.error(response.payload.message || "Addition failed");
+        }
+      }).catch((error) => {
+        toast.error("Addition failed: " + error.message);
+      });
     }
   };
 
@@ -88,93 +101,66 @@ export const Advocate = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleUpdateSubmit = async () => {
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", name);
-    formDataToSend.append("experience", experience);
-    formDataToSend.append("designation", designation);
-    formDataToSend.append("description", description);
-    formDataToSend.append("imageUrl", imageUrl);
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/advocate/update/${id}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          body: formDataToSend,
-        }
-      );
-
-      const data = await response.json();
-      //console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+ 
 
   const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/advocate/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+    dispatch(deleteLawerData(id))
+      .unwrap()
+      .then((response) => {
+        if (response === id) {
+          toast.success("Lawer deleted successfully");
+        } else {
+          toast.error("Error deleting case history");
         }
-      );
+      })
+      .catch((error) => {
+        toast.error("Deletion failed: " + error.message);
+      });
+  };
 
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
 
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+  const resetForm = () => {
+    setUpdateData(false);
+    setId(null);
+    setFormData({ 
+      name: "",
+      experience: "",
+      designation: "",
+      description: "",});
+    dispatch(fetchLawerData());
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/advocate/get`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+    dispatch(fetchLawerData())
+  }, [dispatch]);
 
-        const serviceData = await response.json();
-        //console.log(serviceData);
-        const { data, message } = serviceData;
-        toast(message);
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
 
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Lottie options={defaultLoader} height={200} width={200} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+        Error: {error}
+      </div>
+    );
+  }
 
   return (
     <div>
-      {" "}
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Add Lawer
       </p>
@@ -220,11 +206,11 @@ export const Advocate = () => {
               label="Description"
             />
             {updateData ? (
-              <Button color="blue" type="button" onClick={handleUpdateSubmit}>
+              <Button color="blue" type="submit">
                 Update Lawer
               </Button>
             ) : (
-              <Button color="blue" type="button" onClick={handleSubmit}>
+              <Button color="blue" type="submit">
                 Add Lawer
               </Button>
             )}
@@ -305,7 +291,7 @@ export const Advocate = () => {
             ))}
         </div>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

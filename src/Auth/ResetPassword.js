@@ -1,8 +1,7 @@
 import { Input } from "@material-tailwind/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 const ResetPassword = () => {
   const [formData, setFormData] = useState({
@@ -41,15 +40,15 @@ const ResetPassword = () => {
 
       const { success, message } = data;
 
-      toast(message);
-
       if (success) {
-        setTimeout(() => {
-          navigate("/");
-        }, 6000);
+        toast.success(message);
+        navigate("/")
+      }else{
+        toast.error(message)
       }
+
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -85,7 +84,7 @@ const ResetPassword = () => {
           </div>
         </form>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

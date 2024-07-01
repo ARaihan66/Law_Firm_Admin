@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import avater from "../Assets/avater.png";
 import {
   Card,
@@ -7,74 +7,72 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import Lottie from "react-lottie";
+import Loading from "../Animation/Loader.json";
+import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import { deleteConsultancyData, fetchConsultancyData } from "../features/consultancySlice";
 
-const ClientRequest = () => {
-  const [comments, setComments] = useState("");
-  const navigate = useNavigate();
+const ClientConsultancyRequest = () => {
+
+  const { isLoading, data, error } = useSelector((state) => state.consultancy);
+
+  const dispatch = useDispatch();
+
+
   const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/comment/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+    dispatch(deleteConsultancyData(id))
+      .unwrap()
+      .then((response) => {
+        if (response === id) {
+          toast.success("Request deleted successfully");
+        } else {
+          toast.error("Error deleting request");
         }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/comment/get`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+  dispatch(fetchConsultancyData())
+  }, [dispatch]);
 
-        const { success, data } = await response.json();
 
-        if (success) {
-          setComments(data);
-        } else {
-          toast("No comment is vailable");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Lottie options={defaultLoader} height={200} width={200} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+        Error: {error}
+      </div>
+    );
+  }
+
   return (
     <div>
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Consultancy request of Client
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-        {comments &&
-          comments?.map((item, i) => (
+        {data &&
+          data?.map((item, i) => (
             <Card className="mt-6 relative" key={i}>
               <div className="flex justify-center">
                 <img src={avater} alt="cardimage" className="w-[100px] mt-4" />
@@ -137,9 +135,9 @@ const ClientRequest = () => {
             </Card>
           ))}
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };
 
-export default ClientRequest;
+export default ClientConsultancyRequest;

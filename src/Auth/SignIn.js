@@ -1,7 +1,6 @@
 import { Input } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 import { Link, useNavigate } from "react-router-dom";
 const SignIn = () => {
@@ -35,15 +34,16 @@ const SignIn = () => {
 
       const data = await response.json();
       const { success, message } = data;
-      toast(message);
-
+     
       if (success) {
-        setTimeout(() => {
-          navigate("/home");
-        }, 6000);
+        toast.success(message);
+        navigate("/home")
+      }else{
+        toast.error(message)
       }
+
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error.message);
     }
   };
 
@@ -93,7 +93,7 @@ const SignIn = () => {
           </div>
         </form>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

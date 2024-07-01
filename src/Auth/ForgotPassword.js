@@ -1,7 +1,6 @@
 import { Input } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -26,10 +25,16 @@ const ForgotPassword = () => {
       );
       const data = await response.json();
 
-      const { message } = data;
-      toast(message);
+      const {success, message } = data;
+      
+      if (success) {
+        toast.success(message);
+      }else{
+        toast.error(message)
+      }
+
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -56,7 +61,7 @@ const ForgotPassword = () => {
           </div>
         </form>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { List, ListItem } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLogin } from "react-icons/ai";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Leftbar = () => {
   const navigate = useNavigate();
@@ -26,17 +25,17 @@ const Leftbar = () => {
       );
 
       const data = await response.json();
-      console.log(data);
       const { success, message } = data;
-      toast(message);
 
       if (success) {
-        setTimeout(() => {
-          navigate("/");
-        }, 6000);
+        toast.success(message);
+        navigate("/")
+      }else{
+        toast.error(message)
       }
+
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -57,15 +56,12 @@ const Leftbar = () => {
         <Link to="/home/servicess" onClick={handleOnClick}>
           <ListItem>Add Practice Area</ListItem>
         </Link>
-        <Link to="/home/consultancy-request" onClick={handleOnClick}>
-          <ListItem>Consultancy Request</ListItem>
-        </Link>
         <Link to="/home/client_comment" onClick={handleOnClick}>
           <ListItem>Client Comment</ListItem>
         </Link>
 
         <Link to="/home/client_request" onClick={handleOnClick}>
-          <ListItem>Client Request</ListItem>
+          <ListItem>Client Consultancy Request</ListItem>
         </Link>
 
         <Link to="/home/client_contact" onClick={handleOnClick}>
@@ -81,7 +77,7 @@ const Leftbar = () => {
           Logout
         </ListItem>
       </List>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

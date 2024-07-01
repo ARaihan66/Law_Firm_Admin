@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import avater from "../Assets/avater.png";
 import {
   Card,
   CardBody,
@@ -7,77 +6,73 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import Lottie from "react-lottie";
+import Loading from "../Animation/Loader.json";
+import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import { deleteContactData, fetchContactData } from "../features/clientContactSlice";
+
 
 const ClientContact = () => {
-  const [contacts, setContacts] = useState("");
-  const navigate = useNavigate();
+  
+  const { isLoading, data, error } = useSelector((state) => state.contact);
+
+  const dispatch = useDispatch();
+
+
   const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/contact/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+    dispatch(deleteContactData(id))
+      .unwrap()
+      .then((response) => {
+        if (response === id) {
+          toast.success("Request deleted successfully");
+        } else {
+          toast.error("Error deleting request");
         }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/contact/get`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+  dispatch(fetchContactData())
+  }, [dispatch]);
 
-        const { success, data } = await response.json();
 
-        if (success) {
-          setContacts(data);
-        } else {
-          toast("No comment is vailable");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Lottie options={defaultLoader} height={200} width={200} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+        Error: {error}
+      </div>
+    );
+  }
+
   return (
     <div>
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
         Client Contact
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-        {contacts &&
-          contacts?.map((item, i) => (
+        {data &&
+          data?.map((item, i) => (
             <Card className="mt-6 relative" key={i}>
               <CardBody className="mb-14">
                 <Typography variant="h5" className="mb-2">
@@ -119,7 +114,7 @@ const ClientContact = () => {
             </Card>
           ))}
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

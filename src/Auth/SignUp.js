@@ -1,7 +1,6 @@
 import { Input } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 import { Link } from "react-router-dom";
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -33,10 +32,16 @@ const SignUp = () => {
       });
 
       const data = await response.json();
-      const { message } = data;
-      toast(message);
+      const {success, message } = data;
+      
+      if (success) {
+        toast.success(message);
+      }else{
+        toast.error(message)
+      }
+
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -86,7 +91,7 @@ const SignUp = () => {
           </Link>
         </p>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

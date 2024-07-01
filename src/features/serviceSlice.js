@@ -1,20 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk for fetching data
-export const fetchQuestionData = createAsyncThunk("QuestionData/fetch", async () => {
-  const response = await fetch("http://localhost:8000/api/faq/get", {
+export const fetchServiceData = createAsyncThunk("ServiceData/fetch", async () => {
+  const response = await fetch(`http://localhost:8000/api/practice/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
   });
-  return response.json();
+  const data = await response.json();
+  return data;
 });
 
 // Async thunk for adding data
-export const addQuestionData = createAsyncThunk("QuestionData/add", async (newData) => {
-  const response = await fetch("http://localhost:8000/api/faq/add", {
+export const addServiceData = createAsyncThunk("ServiceData/add", async (newData) => {
+  const response = await fetch(`http://localhost:8000/api/practice/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,13 +23,13 @@ export const addQuestionData = createAsyncThunk("QuestionData/add", async (newDa
     body: JSON.stringify(newData),
     credentials: "include",
   });
-  console.log("State", newData)
-  return response.json();
+  const data = await response.json();
+  return data;
 });
 
 // Async thunk for updating data
-export const updateQuestionData = createAsyncThunk("QuestionData/update", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/faq/update/${id}`, {
+export const updateServiceData = createAsyncThunk("ServiceData/update", async ({ id, formData }) => {
+  const response = await fetch(`http://localhost:8000/api/practice/update/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -36,20 +37,21 @@ export const updateQuestionData = createAsyncThunk("QuestionData/update", async 
     body: JSON.stringify(formData),
     credentials: "include",
   });
-  return response.json();
+  const data = await response.json();
+  return data;
 });
 
 // Async thunk for deleting data
-export const deleteQuestionData = createAsyncThunk("QuestionData/delete", async (id) => {
-  await fetch(`http://localhost:8000/api/faq/delete/${id}`, {
+export const deleteServiceData = createAsyncThunk("ServiceData/delete", async (id) => {
+  await fetch(`http://localhost:8000/api/practice/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
   return id;
 });
 
-const questionSlice = createSlice({
-  name: "questionSlice",
+const ServiceSlice = createSlice({
+  name: "ServiceSlice",
   initialState: {
     isLoading: false,
     data: [],
@@ -58,26 +60,26 @@ const questionSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchQuestionData.pending, (state) => {
+      .addCase(fetchServiceData.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchQuestionData.fulfilled, (state, action) => {
+      .addCase(fetchServiceData.fulfilled, (state, action) => {
         console.log("Fetch response:", action.payload); // Log the response
         state.isLoading = false;
         state.data = action.payload.data; // Assuming the response contains a data field
       })
-      .addCase(fetchQuestionData.rejected, (state, action) => {
+      .addCase(fetchServiceData.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
-      .addCase(addQuestionData.fulfilled, (state, action) => {
+      .addCase(addServiceData.fulfilled, (state, action) => {
         console.log("Add response:", action.payload); // Log the response
         state.isLoading = false;
         if (action.payload.data) {
           state.data.push(action.payload.data);
         }
       })
-      .addCase(updateQuestionData.fulfilled, (state, action) => {
+      .addCase(updateServiceData.fulfilled, (state, action) => {
         console.log("Update response:", action.payload); // Log the response
         state.isLoading = false;
         const index = state.data.findIndex((item) => item._id === action.payload.data._id);
@@ -85,7 +87,7 @@ const questionSlice = createSlice({
           state.data[index] = action.payload.data;
         }
       })
-      .addCase(deleteQuestionData.fulfilled, (state, action) => {
+      .addCase(deleteServiceData.fulfilled, (state, action) => {
         console.log("Delete response:", action.payload); // Log the response
         state.isLoading = false;
         state.data = state.data.filter((item) => item._id !== action.payload);
@@ -93,4 +95,4 @@ const questionSlice = createSlice({
   },
 });
 
-export default questionSlice.reducer;
+export default ServiceSlice.reducer;

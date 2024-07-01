@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// Async thunk for fetching admin data
-export const fetchAdminData = createAsyncThunk("admin/fetchAdminData", async () => {
-  const response = await fetch('http://localhost:8000/api/admin/get', {
+// Async thunk for fetching Lawer data
+export const fetchLawerData = createAsyncThunk("Lawer/fetchLawerData", async () => {
+  const response = await fetch(`http://localhost:8000/api/advocate/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -12,9 +12,9 @@ export const fetchAdminData = createAsyncThunk("admin/fetchAdminData", async () 
   return response.json();
 });
 
-// Async thunk for adding a new admin
-export const addAdmin = createAsyncThunk("admin/addAdmin", async (formData) => {
-  const response = await fetch('http://localhost:8000/api/admin/add', {
+// Async thunk for adding a new Lawer
+export const addLawerData = createAsyncThunk("Lawer/addLawer", async (formData) => {
+  const response = await fetch( `http://localhost:8000/api/advocate/add`, {
     method: 'POST',
     body: formData,
     credentials: "include",
@@ -22,9 +22,9 @@ export const addAdmin = createAsyncThunk("admin/addAdmin", async (formData) => {
   return response.json();
 });
 
-// Async thunk for updating an existing admin
-export const updateAdmin = createAsyncThunk("admin/updateAdmin", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/admin/update/${id}`, {
+// Async thunk for updating an existing Lawer
+export const updateLawerData = createAsyncThunk("Lawer/updateLawer", async ({ id, formData }) => {
+  const response = await fetch(`http://localhost:8000/api/advocate/update/${id}`, {
     method: 'PUT',
     body: formData,
     credentials: "include",
@@ -32,17 +32,17 @@ export const updateAdmin = createAsyncThunk("admin/updateAdmin", async ({ id, fo
   return response.json();
 });
 
-// Async thunk for deleting an admin
-export const deleteAdmin = createAsyncThunk("admin/deleteAdmin", async (id) => {
-  await fetch(`http://localhost:8000/api/admin/delete/${id}`, {
+// Async thunk for deleting an Lawer
+export const deleteLawerData = createAsyncThunk("Lawer/deleteLawer", async (id) => {
+  await fetch(`http://localhost:8000/api/advocate/delete/${id}`, {
     method: 'DELETE',
     credentials: "include",
   });
   return id;
 });
 
-const adminSlice = createSlice({
-  name: "admin",
+const LawerSlice = createSlice({
+  name: "Lawer",
   initialState: {
     isLoading: false,
     data: [],
@@ -51,33 +51,33 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAdminData.pending, (state) => {
+      .addCase(fetchLawerData.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchAdminData.fulfilled, (state, action) => {
+      .addCase(fetchLawerData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload.data;
       })
-      .addCase(fetchAdminData.rejected, (state, action) => {
+      .addCase(fetchLawerData.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
-      .addCase(addAdmin.fulfilled, (state, action) => {
+      .addCase(addLawerData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data.push(action.payload.data);
       })
-      .addCase(updateAdmin.fulfilled, (state, action) => {
+      .addCase(updateLawerData.fulfilled, (state, action) => {
         state.isLoading = false;
         const index = state.data.findIndex(item => item._id === action.payload.data._id);
         if (index !== -1) {
           state.data[index] = action.payload.data;
         }
       })
-      .addCase(deleteAdmin.fulfilled, (state, action) => {
+      .addCase(deleteLawerData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = state.data.filter(item => item._id !== action.payload);
       });
   },
 });
 
-export default adminSlice.reducer;
+export default LawerSlice.reducer;

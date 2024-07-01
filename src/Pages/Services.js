@@ -1,17 +1,20 @@
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Lottie from "react-lottie";
+import Loading from "../Animation/Loader.json";
+import toast, { Toaster } from 'react-hot-toast';
 import {
   Card,
   CardBody,
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import { addServiceData, deleteServiceData, fetchServiceData, updateServiceData } from "../features/serviceSlice";
+
+
 const Services = () => {
-  const [data, setData] = useState("");
   const [id, setId] = useState(null);
   const [updateData, setUpdateData] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,7 +24,9 @@ const Services = () => {
 
   const { service_type, service_description } = formData;
 
-  const navigate = useNavigate();
+  const { isLoading, data, error } = useSelector((state) => state.service);
+  console.log(data)
+  const dispatch = useDispatch();
 
   const handleOnChange = (event) => {
     setFormData((preState) => ({
@@ -32,31 +37,48 @@ const Services = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch(`http://localhost:8000/api/practice/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
 
-      const data = await response.json();
-      //console.log(data);
-      const { message, success } = data;
+    const formDataToSend = new FormData();
 
-      toast(message);
+    formDataToSend.append("service_type", service_type)
+    formDataToSend.append("service_description", service_description)
+   
+    if (!service_type || !service_description) {
+      toast.error("Please fill up all fields");
+      return;
+    }
 
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
+    if (updateData) {
+      dispatch(updateServiceData({ id, formDataToSend }))
+        .unwrap()
+        .then((response) => {
+          if (response.success) {
+            toast.success(response.message);
+            resetForm();
+          } else {
+            toast.error(response.message || "Update failed");
+          }
+        })
+        .catch((error) => {
+          toast.error("Update failed: " + error.message);
+        });
+    } else {
+      dispatch(addServiceData(formDataToSend))
+        .unwrap()
+        .then((response) => {
+          if (response.success) {
+            toast.success(response.message);
+            resetForm();
+          } else {
+            toast.error(response.message || "Addition failed");
+          }
+        })
+        .catch((error) => {
+          toast.error("Addition failed: " + error.message);
+        });
     }
   };
+
 
   const handleUpdate = (id, service_type, service_description) => {
     setId(id);
@@ -68,86 +90,60 @@ const Services = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleUpdateSubmit = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/practice/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/practice/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
+    dispatch(deleteServiceData(id))
+    .unwrap()
+    .then((response) => {
+      if (response === id) {
+        toast.success("FAQ deleted successfully");
+      } else {
+        toast.error("Error deleting FAQ");
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    })
+    .catch((error) => {
+      toast.error(error.message);
+    });
+  };
+
+  const resetForm = () => {
+    setUpdateData(false);
+    setId(null);
+    setFormData({ service_type: "", service_description: "" });
+    dispatch(fetchServiceData());
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/practice/get`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+   dispatch(fetchServiceData())
+  }, [dispatch]);
 
-        const serviceData = await response.json();
-        //console.log(serviceData);
-        const { data, message } = serviceData;
-        toast(message);
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Lottie options={defaultLoader} height={200} width={200} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+        Error: {error}
+      </div>
+    );
+  }
+
+
   return (
     <div>
       {" "}
@@ -155,7 +151,7 @@ const Services = () => {
         Add Practice Area
       </p>
       <div className="flex justify-center">
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="mt-6 p-8 flex flex-col w-[350px] md:w-[600px] lg:w-[900px] gap-6 bg-white shadow rounded">
             <Input
               onChange={handleOnChange}
@@ -173,11 +169,11 @@ const Services = () => {
             />
 
             {updateData ? (
-              <Button color="blue" type="button" onClick={handleUpdateSubmit}>
+              <Button color="blue" type="submit" >
                 Update Practice Area
               </Button>
             ) : (
-              <Button color="blue" type="button" onClick={handleSubmit}>
+              <Button color="blue" type="submit">
                 Add Practice Area
               </Button>
             )}
@@ -224,7 +220,7 @@ const Services = () => {
             ))}
         </div>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

@@ -1,160 +1,125 @@
-import React from "react";
-import { Input } from "@material-tailwind/react";
-import { Button } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-
-import { Card, CardBody, CardFooter } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { Input, Button, Card, CardBody, CardFooter, Typography } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import { addCaseData, deleteCaseData, updateCaseData, fetchCaseData } from "../features/caseHistorySlice";
+import Lottie from "react-lottie";
+import Loading from "../Animation/Loader.json";
+import toast, { Toaster } from "react-hot-toast";
 
 const CaseHistory = () => {
-  const [data, setData] = useState();
   const [id, setId] = useState(null);
   const [updateData, setUpdateData] = useState(false);
   const [formData, setFormData] = useState({
     achievement: "",
-    numeric: "",
+    numeric: ""
   });
 
   const { achievement, numeric } = formData;
-
-  const navigate = useNavigate();
+  const { isLoading, data, error } = useSelector((state) => state.case);
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    //const formDataToSend = new FormData();
-    //formDataToSend.append("achievement", achievement);
-    //formDataToSend.append("numeric", numeric);
+    if (!achievement || !numeric) {
+      toast.error("Please fill up all fields");
+      return;
+    }
 
-    //console.log(formDataToSend);
-    try {
-      const responseData = await fetch(`http://localhost:8000/api/case/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
+    if (updateData) {
+      dispatch(updateCaseData({ id, formData }))
+      .unwrap()
+      .then((response) => {
+        console.log("Res", response.payload);
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          resetForm();
+        } else {
+          toast.error(response.payload.message || "Update failed");
+        }
+      }).catch((error) => {
+        toast.error("Update failed: " + error.message);
+        console.log(error)
       });
-
-      const data = await responseData.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
+    } else {
+      dispatch(addCaseData(formData)).then((response) => {
+        if (response.payload.success) {
+          toast.success(response.payload.message);
+          resetForm();
+        } else {
+          toast.error(response.payload.message || "Addition failed");
+        }
+      }).catch((error) => {
+        toast.error("Addition failed: " + error.message);
+      });
     }
   };
 
   const handleUpdate = (id, achievement, numeric) => {
     setId(id);
     setUpdateData(true);
-    setFormData({
-      achievement: achievement,
-      numeric: numeric,
-    });
+    setFormData({ achievement, numeric });
     window.scrollTo(0, 0);
   };
 
-  const handleUpdateSubmit = async () => {
-    //const formDataToSend = new FormData();
-    //formDataToSend.append("achievement", achievement);
-    //formDataToSend.append("numeric", numeric);
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/case/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(formData),
+  const handleDelete = (id) => {
+    dispatch(deleteCaseData(id))
+      .unwrap()
+      .then((response) => {
+        if (response === id) {
+          toast.success("Case history deleted successfully");
+        } else {
+          toast.error("Error deleting case history");
         }
-      );
-
-      const data = await response.json();
-      //console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+      })
+      .catch((error) => {
+        toast.error("Deletion failed: " + error.message);
+      });
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/case/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      const { message, success } = data;
-      toast(message);
-
-      if (success) {
-        setTimeout(() => {
-          navigate(0, { reload: true });
-        }, 6000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+  const resetForm = () => {
+    setUpdateData(false);
+    setId(null);
+    setFormData({ achievement: "", numeric: "" });
+    dispatch(fetchCaseData());
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/case/get`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+    dispatch(fetchCaseData());
+  }, [dispatch]);
 
-        const serviceData = await response.json();
-        console.log(serviceData);
-        const { data, message } = serviceData;
-        toast(message);
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const defaultLoader = {
+    loop: true,
+    autoplay: true,
+    animationData: Loading,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
 
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Lottie options={defaultLoader} height={200} width={200} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] font-bold text-xl">
+        Error: {error}
+      </div>
+    );
+  }
+
   return (
     <div>
       <p className="text-center uppercase pt-5 text-3xl font-semibold text-deep-purple-800">
@@ -179,69 +144,46 @@ const CaseHistory = () => {
               size="lg"
               label="Case History Numeric"
             />
-
-            {updateData ? (
-              <Button color="blue" type="button" onClick={handleUpdateSubmit}>
-                Update
-              </Button>
-            ) : (
-              <Button color="blue" type="button" onClick={handleSubmit}>
-                Submit
-              </Button>
-            )}
+            <Button color="blue" type="submit">
+              {updateData ? "Update" : "Submit"}
+            </Button>
           </div>
         </form>
       </div>
       <div className="flex justify-center">
         <div className="md:px-10 p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
           {data &&
-            data?.map((item, i) => (
+            data.map((item, i) => (
               <Card className="mt-6 relative" key={i}>
                 <CardBody className="mb-14">
                   <div>
-                    <div>
-                      <h1 className="text-xl font-semibold">
-                        Case History Achievement :
-                        <span className="text-[17px] text-xl font-normal ml-1">
-                          <br />
-                          {item.achievement}
-                        </span>
-                      </h1>
-                      <p className="text-xl font-semibold mt-1">
-                        Case History Numeric:
-                        <span className="text-[17px] font-normal ml-1">
-                          <br /> {item.numeric}
-                        </span>
-                      </p>
-                    </div>
+                    <Typography variant="h5" color="blue-gray" className="mb-2">
+                      Case History Achievement: <br /> {item.achievement}
+                    </Typography>
+                    <Typography variant="h6">
+                      Case History Numeric: <br /> {item.numeric}
+                    </Typography>
                   </div>
                 </CardBody>
-                <CardFooter className="pt-0 absolute bottom-0 w-full">
-                  <div className="flex justify-between ">
-                    <Button
-                      onClick={() => {
-                        handleUpdate(item._id, item.achievement, item.numeric);
-                      }}
-                      color="green"
-                    >
-                      Update
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleDelete(item._id);
-                      }}
-                      color="red"
-                      className=""
-                    >
-                      Delete
-                    </Button>
-                  </div>
+                <CardFooter className="pt-0 absolute bottom-0 w-full flex justify-between">
+                  <Button
+                    onClick={() => handleUpdate(item._id, item.achievement, item.numeric)}
+                    color="green"
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    onClick={() => handleDelete(item._id)}
+                    color="red"
+                  >
+                    Delete
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
         </div>
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };
