@@ -25,7 +25,6 @@ const Services = () => {
   const { service_type, service_description } = formData;
 
   const { isLoading, data, error } = useSelector((state) => state.service);
-  console.log(data)
   const dispatch = useDispatch();
 
   const handleOnChange = (event) => {
@@ -37,47 +36,35 @@ const Services = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const formDataToSend = new FormData();
-
-    formDataToSend.append("service_type", service_type)
-    formDataToSend.append("service_description", service_description)
-   
+  
     if (!service_type || !service_description) {
       toast.error("Please fill up all fields");
       return;
     }
 
-    if (updateData) {
-      dispatch(updateServiceData({ id, formDataToSend }))
-        .unwrap()
-        .then((response) => {
-          if (response.success) {
-            toast.success(response.message);
-            resetForm();
-          } else {
-            toast.error(response.message || "Update failed");
-          }
-        })
-        .catch((error) => {
-          toast.error("Update failed: " + error.message);
-        });
-    } else {
-      dispatch(addServiceData(formDataToSend))
-        .unwrap()
-        .then((response) => {
-          if (response.success) {
-            toast.success(response.message);
-            resetForm();
-          } else {
-            toast.error(response.message || "Addition failed");
-          }
-        })
-        .catch((error) => {
-          toast.error("Addition failed: " + error.message);
-        });
+    try {
+      if (updateData) {
+        const response = await dispatch(updateServiceData({ id, formData })).unwrap();
+        if (response.success) {
+          toast.success(response.message);
+          resetForm();
+        } else {
+          toast.error(response.message || "Update failed");
+        }
+      } else {
+        const response = await dispatch(addServiceData(formData)).unwrap();
+        if (response.success) {
+          toast.success(response.message);
+          resetForm();
+        } else {
+          toast.error(response.message || "Addition failed");
+        }
+      }
+    } catch (error) {
+      toast.error("Operation failed: " + error.message);
     }
   };
+  
 
 
   const handleUpdate = (id, service_type, service_description) => {

@@ -11,7 +11,7 @@ const VerifyMail = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/admin/${id}/verify/${token}`
+          `https://law-firm-backend-sigma.vercel.app/api/admin/${id}/verify/${token}`
         );
         const { message } = response.data;
         setStatusMessage(message);

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk for fetching Lawer data
 export const fetchLawerData = createAsyncThunk("Lawer/fetchLawerData", async () => {
-  const response = await fetch(`http://localhost:8000/api/advocate/get`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/advocate/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +14,7 @@ export const fetchLawerData = createAsyncThunk("Lawer/fetchLawerData", async () 
 
 // Async thunk for adding a new Lawer
 export const addLawerData = createAsyncThunk("Lawer/addLawer", async (formData) => {
-  const response = await fetch( `http://localhost:8000/api/advocate/add`, {
+  const response = await fetch( `https://law-firm-backend-sigma.vercel.app/api/advocate/add`, {
     method: 'POST',
     body: formData,
     credentials: "include",
@@ -24,7 +24,7 @@ export const addLawerData = createAsyncThunk("Lawer/addLawer", async (formData) 
 
 // Async thunk for updating an existing Lawer
 export const updateLawerData = createAsyncThunk("Lawer/updateLawer", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/advocate/update/${id}`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/advocate/update/${id}`, {
     method: 'PUT',
     body: formData,
     credentials: "include",
@@ -34,7 +34,7 @@ export const updateLawerData = createAsyncThunk("Lawer/updateLawer", async ({ id
 
 // Async thunk for deleting an Lawer
 export const deleteLawerData = createAsyncThunk("Lawer/deleteLawer", async (id) => {
-  await fetch(`http://localhost:8000/api/advocate/delete/${id}`, {
+  await fetch(`https://law-firm-backend-sigma.vercel.app/api/advocate/delete/${id}`, {
     method: 'DELETE',
     credentials: "include",
   });

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk for fetching data
 export const fetchQuestionData = createAsyncThunk("QuestionData/fetch", async () => {
-  const response = await fetch("http://localhost:8000/api/faq/get", {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +14,7 @@ export const fetchQuestionData = createAsyncThunk("QuestionData/fetch", async ()
 
 // Async thunk for adding data
 export const addQuestionData = createAsyncThunk("QuestionData/add", async (newData) => {
-  const response = await fetch("http://localhost:8000/api/faq/add", {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const addQuestionData = createAsyncThunk("QuestionData/add", async (newDa
 
 // Async thunk for updating data
 export const updateQuestionData = createAsyncThunk("QuestionData/update", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/faq/update/${id}`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/update/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export const updateQuestionData = createAsyncThunk("QuestionData/update", async 
 
 // Async thunk for deleting data
 export const deleteQuestionData = createAsyncThunk("QuestionData/delete", async (id) => {
-  await fetch(`http://localhost:8000/api/faq/delete/${id}`, {
+  await fetch(`https://law-firm-backend-sigma.vercel.app/api/faq/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
   });

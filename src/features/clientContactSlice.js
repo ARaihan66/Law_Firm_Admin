@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk for fetching data
 export const fetchContactData = createAsyncThunk("ContactData/fetch", async () => {
-  const response = await fetch( `http://localhost:8000/api/contact/get`, {
+  const response = await fetch( `https://law-firm-backend-sigma.vercel.app/api/contact/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +14,7 @@ export const fetchContactData = createAsyncThunk("ContactData/fetch", async () =
 
 // Async thunk for deleting data
 export const deleteContactData = createAsyncThunk("ContactData/delete", async (id) => {
-  await fetch( `http://localhost:8000/api/contact/delete/${id}`, {
+  await fetch( `https://law-firm-backend-sigma.vercel.app/api/contact/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
   });

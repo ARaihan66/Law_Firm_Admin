@@ -16,7 +16,7 @@ import { deleteConsultancyData, fetchConsultancyData } from "../features/consult
 const ClientConsultancyRequest = () => {
 
   const { isLoading, data, error } = useSelector((state) => state.consultancy);
-
+ console.log("Data", data);
   const dispatch = useDispatch();
 
 
@@ -86,7 +86,7 @@ const ClientConsultancyRequest = () => {
                     Phone :
                     <span className="text-[17px] font-normal ml-1">
                       <br />
-                      {item.phone}
+                      {item.phoneNo}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1 ">
@@ -98,25 +98,25 @@ const ClientConsultancyRequest = () => {
                   <p className="text-xl font-semibold mt-1">
                     Subject :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.comment}
+                      <br /> {item.subject}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1">
                     Expected Date :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.comment}
+                      <br /> {item.expectedDate}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1">
                     Selected Lawer :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.comment}
+                      <br /> {item.selectedLawer}
                     </span>
                   </p>
                   <p className="text-xl font-semibold mt-1">
                     Request Message :
                     <span className="text-[17px] font-normal ml-1">
-                      <br /> {item.comment}
+                      <br /> {item.requestMessage}
                     </span>
                   </p>
                 </Typography>

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchCaseData = createAsyncThunk("case/fetch", async () => {
-  const response = await fetch("http://localhost:8000/api/case/get", {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -18,7 +18,7 @@ export const fetchCaseData = createAsyncThunk("case/fetch", async () => {
 });
 
 export const addCaseData = createAsyncThunk('case/add', async (formData) => {
-  const response = await fetch("http://localhost:8000/api/case/add", {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -36,7 +36,7 @@ export const addCaseData = createAsyncThunk('case/add', async (formData) => {
 });
 
 export const updateCaseData = createAsyncThunk("case/update", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/case/update/${id}`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/update/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -54,7 +54,7 @@ export const updateCaseData = createAsyncThunk("case/update", async ({ id, formD
 });
 
 export const deleteCaseData = createAsyncThunk("case/delete", async (id) => {
-  const response = await fetch(`http://localhost:8000/api/case/delete/${id}`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/case/delete/${id}`, {
     method: "DELETE",
     credentials: "include"
   });

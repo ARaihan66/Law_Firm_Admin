@@ -37,12 +37,12 @@ const CaseHistory = () => {
       dispatch(updateCaseData({ id, formData }))
       .unwrap()
       .then((response) => {
-        console.log("Res", response.payload);
-        if (response.payload.success) {
-          toast.success(response.payload.message);
+        console.log("Res", response);
+        if (response.success) {
+          toast.success(response.message);
           resetForm();
         } else {
-          toast.error(response.payload.message || "Update failed");
+          toast.error(response.message || "Update failed");
         }
       }).catch((error) => {
         toast.error("Update failed: " + error.message);

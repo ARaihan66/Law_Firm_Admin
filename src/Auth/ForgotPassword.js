@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/password-forgot`,
+        `https://law-firm-backend-sigma.vercel.app/api/admin/password-forgot`,
         {
           method: "POST",
           headers: {

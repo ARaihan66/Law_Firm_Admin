@@ -59,17 +59,20 @@ export const Advocate = () => {
     formDataToSend.append("designation", designation);
     formDataToSend.append("description", description);
     formDataToSend.append("imageUrl", imageUrl);
+
+    // Logging the FormData
+    console.log("Form Data", formDataToSend)
     
     if (updateData) {
       dispatch(updateLawerData({id, formData: formDataToSend }))
       .unwrap()
       .then((response) => {
-        console.log("Res", response.payload);
-        if (response.payload.success) {
-          toast.success(response.payload.message);
+        console.log("Res", response);
+        if (response.success) {
+          toast.success(response.message);
           resetForm();
         } else {
-          toast.error(response.payload.message || "Update failed");
+          toast.error(response.message || "Update failed");
         }
       }).catch((error) => {
         toast.error("Update failed: " + error.message);
@@ -77,11 +80,11 @@ export const Advocate = () => {
       });
     } else {
       dispatch(addLawerData(formDataToSend)).then((response) => {
-        if (response.payload.success) {
-          toast.success(response.payload.message);
+        if (response.success) {
+          toast.success(response.message);
           resetForm();
         } else {
-          toast.error(response.payload.message || "Addition failed");
+          toast.error(response.message || "Addition failed");
         }
       }).catch((error) => {
         toast.error("Addition failed: " + error.message);

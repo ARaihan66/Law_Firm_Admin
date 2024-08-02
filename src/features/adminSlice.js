@@ -2,19 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk for fetching admin data
 export const fetchAdminData = createAsyncThunk("admin/fetchAdminData", async () => {
-  const response = await fetch('http://localhost:8000/api/admin/get', {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/get`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
   });
+  //console.log(await response.json());
   return response.json();
 });
 
 // Async thunk for adding a new admin
 export const addAdmin = createAsyncThunk("admin/addAdmin", async (formData) => {
-  const response = await fetch('http://localhost:8000/api/admin/add', {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/add`, {
     method: 'POST',
     body: formData,
     credentials: "include",
@@ -24,7 +25,7 @@ export const addAdmin = createAsyncThunk("admin/addAdmin", async (formData) => {
 
 // Async thunk for updating an existing admin
 export const updateAdmin = createAsyncThunk("admin/updateAdmin", async ({ id, formData }) => {
-  const response = await fetch(`http://localhost:8000/api/admin/update/${id}`, {
+  const response = await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/update/${id}`, {
     method: 'PUT',
     body: formData,
     credentials: "include",
@@ -34,7 +35,7 @@ export const updateAdmin = createAsyncThunk("admin/updateAdmin", async ({ id, fo
 
 // Async thunk for deleting an admin
 export const deleteAdmin = createAsyncThunk("admin/deleteAdmin", async (id) => {
-  await fetch(`http://localhost:8000/api/admin/delete/${id}`, {
+  await fetch(`https://law-firm-backend-sigma.vercel.app/api/admin/delete/${id}`, {
     method: 'DELETE',
     credentials: "include",
   });
